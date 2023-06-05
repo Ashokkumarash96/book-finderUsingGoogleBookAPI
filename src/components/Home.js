@@ -16,7 +16,7 @@ const Home = () => {
   // use the useState hook to create a state variable for the data array
   const [data, setData] = useState([]);
 
-  // define a function to find the book by name
+  // define a function to find the book by name if Enter key is pressed
   const findBook = (e) => {
     // check if the key pressed is Enter
     if (e.key === "Enter") {
@@ -36,6 +36,24 @@ const Home = () => {
           alert(err.message);
         });
     }
+  };
+  // define a function to find the book by name if Search Icon is pressed
+  const searchBooks = () => {
+    // define the API key for Google Books API
+    const APIkey = "AIzaSyAFBlP0eKz2Zdsq8604bIuqAnW3-rjnzlw";
+    // define the url for making the GET request with the search book value and API key
+    const url = `https://www.googleapis.com/books/v1/volumes?q=${searchBook}&download=epub&key=${APIkey}&maxResults=40`;
+
+    // use axios to make a GET request to the url
+    axios
+      .get(url)
+      // handle the response received
+      .then((res) => setData(res.data.items))
+      // handle any error occurred
+      .catch((err) => {
+        // alert the error message
+        alert(err.message);
+      });
   };
 
   // return the JSX for the Home component
@@ -68,7 +86,7 @@ const Home = () => {
             />
             {/* render a button element with the BsSearch icon */}
             <button className='searchButton'>
-              <BsSearch />
+              <BsSearch onClick={searchBooks} />
             </button>
           </div>
           {/* render an image element for showing a book stack */}
